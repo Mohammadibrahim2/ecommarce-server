@@ -11,14 +11,21 @@ const productSchema= mongoose.Schema({
     description:{
         type:String
     },
+    image:{
+        type:String,
+        default:''
+
+    },
     brand:{
         type:String
     },
     countInStock:{
     type:Number
     },
-    dateCreated:{
-        type:Date
+    createdAt:{
+        type: Date, 
+        required: true, 
+        default: Date.now
     },
     rating:{
         type:Number

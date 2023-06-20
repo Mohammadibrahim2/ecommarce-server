@@ -14,13 +14,19 @@ router.post("/",async(req,res)=>{
        name:req.body.name,
        price:req.body.price,
        category:req.body.category,
+       brand:req.body.brand,
+       orderItems:req.body.orderItems
+       
+
+      
+       
      
 
     })
        console.log(order)
        const result=await  order.save()
      
-     res.send(result)
+     res.send(order)
    
    });
    

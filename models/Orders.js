@@ -17,7 +17,7 @@ const orderSchema= mongoose.Schema({
     countInStock:{
     type:Number
     },
-    dateCreated:{
+    createdAt:{
         type: Date, 
         required: true, 
         default: Date.now
@@ -26,6 +26,21 @@ const orderSchema= mongoose.Schema({
         type:Number
     },
     category:{
+        type:String
+    },
+    orderItems:[{
+        type:String
+    }],
+    country:{
+        type:String
+    },
+    phone:{
+        type:Number
+    },
+    totalPrice:{
+        type:Number
+    },
+    user:{
         type:String
     }
 

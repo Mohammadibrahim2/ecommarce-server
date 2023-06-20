@@ -22,7 +22,7 @@ const app=express()
 // const User= new mongoose.model("User",userSchema)
  //mohammadibrahim6454
         //ibWUdfbgoLQFHvtG
-        app.use(cors())
+ app.use(cors())
 dotenv.config()
 app.use(express.json())
 
@@ -36,6 +36,7 @@ app.use(express.json())
 
 const productRouter=require("./routes/productrouter")
 const orderRouter=require("./routes/orderrouter")
+const userRouter=require("./routes/userrouter")
 
 
 //connection withe db:-
@@ -56,6 +57,7 @@ async function run(){
 // start ecommarce:
 app.use("/product",productRouter)
 app.use("/order",orderRouter)
+app.use("/user",userRouter)
  
 
  

@@ -10,6 +10,25 @@ const productSchema = require("../models/Product");
 
 //create product into db:-
 router.post("/",async(req,res)=>{
+
+
+    // const body = req.body;
+    // console.log(body);
+  
+    // let items = req.body.map(item => {
+    //   return {
+    //     orderid: item.id,
+    //     ordername: item.name,
+    //     orderdescription: item.description,
+    //     orderquantity: item.quantity,
+    //     ordertotalprice: item.totalPrice
+    //   };
+   
+  
+    // Orders.insertMany(items)
+      
+     
+//   })
     const product = new  Product({
        name:req.body.name,
        price:req.body.price
@@ -44,9 +63,10 @@ router.get("/:key",async(req,res)=>{
 router.put("/:id",async(req,res)=>{
     const product = await Product.findByIdAndUpdate({_id:req.params.id},
         {
-        $set:{ name:"blackberry"
-
-        }},
+            name:req.body.name,
+            price:req.body.price
+      
+        },
     {
         useFindAndModidy:false
     }
@@ -61,14 +81,12 @@ router.put("/:id",async(req,res)=>{
 
 //deldete data from db :-
 router.delete("/:id",async(req,res)=>{
-    const product = await Product.deleteOne({_id:req.params.id},
+    const product = await Product.deleteOne({_id:req.params.id}
        
-   
-        
     )
     
     
-       console.log(product)
+    console.log(product)
     res.send(product)
      
 });
