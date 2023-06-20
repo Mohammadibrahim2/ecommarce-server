@@ -36,8 +36,9 @@ app.use(express.json())
 
 const productRouter=require("./routes/productrouter")
 const orderRouter=require("./routes/orderrouter")
-const userRouter=require("./routes/userrouter")
-
+const userRouter=require("./routes/userrouter");
+// const authJwt = require("./helpers/authjwt");
+// app.use(authJwt)
 
 //connection withe db:-
 const uri = process.env.CONNECT_DB
@@ -55,12 +56,16 @@ async function run(){
     
         try{ 
 // start ecommarce:
+
+
+
+
 app.use("/product",productRouter)
 app.use("/order",orderRouter)
 app.use("/user",userRouter)
- 
 
- 
+
+
 
 //send sode of ecommarce:-
  
@@ -83,7 +88,7 @@ const errorHandler =(err,req,res,next)=>{
     if(res.headersSent){
         return next(err);
     }
-    res.status(500).json({
+    res.status(401).json({
         error:err
     })
 }

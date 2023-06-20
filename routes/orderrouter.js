@@ -2,6 +2,7 @@ const express =require("express")
 const router =express.Router()
 const mongoose= require("mongoose");
 const orderSchema = require("../models/Product");
+const checklogin = require("../helpers/authjwt");
 
 
 
@@ -32,7 +33,7 @@ router.post("/",async(req,res)=>{
    
 
 //get data from db :-
-router.get("/",async(req,res)=>{
+router.get("/",checklogin, async(req,res)=>{
     const order = await Order.find()
        console.log(order)
     res.send(order)

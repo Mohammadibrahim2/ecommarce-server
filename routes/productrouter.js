@@ -2,6 +2,7 @@ const express =require("express")
 const router =express.Router()
 const mongoose= require("mongoose");
 const productSchema = require("../models/Product");
+const checklogin = require("../helpers/authjwt");
 
 
 
@@ -42,7 +43,7 @@ router.post("/",async(req,res)=>{
    
 
 //get data from db :-
-router.get("/",async(req,res)=>{
+router.get("/",checklogin, async(req,res)=>{
     const product = await Product.find()
        console.log(product)
     res.send(product)

@@ -3,13 +3,14 @@ const router =express.Router()
 const mongoose= require("mongoose");
 const userSchema = require("../models/User");
 const bcrypt =require('bcryptjs')
-const jwt =require('jsonwebtoken')
+const jwt =require('jsonwebtoken');
+const checklogin = require("../helpers/authjwt");
 
 
  const User= new mongoose.model("User",userSchema);
 
 //create product into db:-
-router.post("/",async(req,res)=>{
+router.post("/register",async(req,res)=>{
     let user = new  User({
        name:req.body.name,
        email:req.body.email,
@@ -28,7 +29,7 @@ router.post("/",async(req,res)=>{
    
 
 //get data from db :-
-router.get("/",async(req,res)=>{
+router.get("/", checklogin, async(req,res)=>{
     const user = await User.find().select("-passwordHash")
        console.log(user)
     res.send(user)
@@ -47,11 +48,12 @@ router.get("/:id",async(req,res)=>{
 });
 //update data into db :
 router.put("/:id",async(req,res)=>{
+
     const user = await User.findByIdAndUpdate({_id:req.params.id},
         {
-        $set:{ name:"blackberry"
+        $set:{ name:req.body.name
 
-        }},
+        } },
     {
         useFindAndModidy:false
     }
@@ -59,7 +61,7 @@ router.put("/:id",async(req,res)=>{
     )
     
     
-       console.log(user)
+     console.log(user)
     res.send(user)
      
 });
@@ -86,10 +88,13 @@ router.post('/login',async(req,res)=>{
     if(user && bcrypt.compareSync(req.body.password,user.passwordHash)){
         const token=jwt.sign(
             {
-                userId:user.id
+                userId:user.id,
+                userEmail:user.email,
+                isAdmin:user.isAdmin
+                
             },
             secret,
-            {expiresIn:'1m'}
+            {expiresIn:'1h'}
         )
         return res.status(200).send({user:user.email,token:token})
     }
