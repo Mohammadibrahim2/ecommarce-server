@@ -1,35 +1,25 @@
 const mongoose = require('mongoose');
 
+
 const orderSchema= mongoose.Schema({
-    name:{
-        type:String,
-        
-    },
-    price:{
-        type:String
-    },
-    description:{
-        type:String
-    },
-    brand:{
-        type:String
-    },
-    countInStock:{
-    type:Number
-    },
+
+
+
+
+
+
+
+
     createdAt:{
         type: Date, 
         required: true, 
         default: Date.now
     },
-    rating:{
-        type:Number
-    },
-    category:{
-        type:String
-    },
+    
     orderItems:[{
-        type:String
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"OrderItem",
+        required:true
     }],
     country:{
         type:String
@@ -37,13 +27,35 @@ const orderSchema= mongoose.Schema({
     phone:{
         type:Number
     },
-    totalPrice:{
-        type:Number
+    city:{
+        type:String
+    },
+
+    shipping:{
+        type:String
+
     },
     user:{
-        type:String
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
+    status:{
+        type:String,
+        default:"Pandding",
+        required:true
+    },
+    totalPrice:{
+        type:Number,
+        required:true
     }
 
    
+});
+orderSchema.virtual('id').get(function (){
+    return this._id.toHexString();
+
+});
+orderSchema.set('toJSON',{
+    virtuals:true
 })
 module.exports=orderSchema
