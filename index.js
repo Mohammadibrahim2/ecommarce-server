@@ -36,7 +36,10 @@ app.use(express.json())
 
 const productRouter=require("./routes/productrouter")
 const orderRouter=require("./routes/orderrouter")
-const userRouter=require("./routes/userrouter");
+const userRouter=require("./routes/userrouter")
+const categoryRouter=require("./routes/categoryrouter")
+const subcategoryRouter=require("./routes/subcategoryrouter")
+
 // const authJwt = require("./helpers/authjwt");
 // app.use(authJwt)
 
@@ -63,6 +66,9 @@ async function run(){
 app.use("/product",productRouter)
 app.use("/order",orderRouter)
 app.use("/user",userRouter)
+app.use("/category",categoryRouter)
+app.use("/subcategory",subcategoryRouter)
+
 
 
 

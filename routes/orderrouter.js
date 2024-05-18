@@ -4,7 +4,7 @@ const mongoose= require("mongoose");
 const orderSchema = require("../models/Orders");
 const checklogin = require("../helpers/authjwt");
 const OrderItemSchema = require("../models/Order-Item");
-
+const sendOrderMail =require('../sendMail/SendMail')
 
 
 
@@ -13,12 +13,6 @@ const OrderItem= new mongoose.model("OrderItem",OrderItemSchema)
 //create order into db:-
 
 router.post("/",async(req,res)=>{
-
-
-
-
-
-
 
 let orderItemsIds=Promise.all( req.body.orderItems.map(async orderItem=>{
 
@@ -58,8 +52,13 @@ const totalPrices= await Promise.all(orderItemsIdsResolved.map(async (orderItemI
      return res.status(400).send('the order is not be created');
     //  console.log(order)
 
+    const users=await result.populate("user","email")
+    const orderInfo= await result.populate({path:"orderItems",populate:"product"})
+    
 
+    sendOrderMail(users,orderInfo)
 
+// console.log(users,orderInfo)
 
      res.send(order)
    
@@ -69,10 +68,12 @@ const totalPrices= await Promise.all(orderItemsIdsResolved.map(async (orderItemI
 //get data from db :-
 
 router.get("/",async(req,res)=>{
-    const orderList = await Order.find().populate("user","name").sort({"createdAt":-1})
-      
-       console.log( orderList)
-    res.send( orderList)
+    const orderList = await Order.find().populate("user","name")
+    .populate({path:"orderItems",populate:"product"}).sort({"createdAt":-1})
+
+    const countOrders=await Order.countDocuments({})
+ 
+    res.send({orderList,countOrders})
      
 });
 //search from db by key:-
@@ -81,7 +82,7 @@ router.get("/:id", async(req,res)=>{
     .populate("user","name")
     .populate({path:"orderItems",populate:"product"})
     
-    res.send(order)
+    res.send()
      
 });
 //getting totalseles:-
@@ -104,7 +105,7 @@ catch(err){
     console.log(err)}
 });
 //how many ordere id count:-
-//  router.get("/get/count",async(req,res)=>{
+//  router.get("/get/count",async(req,res)=>{p
    
 //     const orderCount=await Order.countDocuments({ limit: 10 })
 //     console.log(orderCount)
@@ -116,7 +117,8 @@ catch(err){
 //  });
 // geting the orders by specific users:-
 router.get("/get/userorders/:userid", async(req,res)=>{
-    const userOrders = await Order.findById(req.params.userid).populate({path:"orderItems",populate:"product"})
+    const userOrders = await Order.findById(req.params.userid).populate({
+        path:"orderItems",populate:"product"})
     .sort({"createdAt":-1})
     
     res.send(userOrders )
@@ -146,27 +148,28 @@ router.put("/:id",async(req,res)=>{
 
 //delate data from db :-
 router.delete("/:id",async(req,res)=>{
-    const order = await Order.findByIdAndRemove(req.params.id,
+
+    // const order = await Order.findByIdAndRemove(req.params.id,
        
-    ).then(async order=>{
-        if(order){
-            await order.orderItems.map( async orderItem=>{
-                await OrderItem.findByIdAndRemove(orderItem)
-            })
-            return res.send("deleted order")
-        }
+    // ).then(async order=>{
+    //     if(order){
+    //         await order.orderItems.map( async orderItem=>{
+    //             await OrderItem.findByIdAndRemove(orderItem)
+    //         })
+    //         return res.send("deleted order")
+    //     }
 
 
 
        
-    })
+    // })
     
 
 
 
 
-       console.log(order)
-    res.send(order)
+    //    console.log(order)
+    // res.send(order)
      
 });
 

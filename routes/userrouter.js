@@ -12,40 +12,54 @@ const checklogin = require("../helpers/authjwt");
 //create product into db:-
 router.post("/register",async(req,res)=>{
     let user = new  User({
-       name:req.body.name,
+       firstName:req.body.fName,
+       lastName:req.body.lName,
        email:req.body.email,
+       phone:req.body.phone,
        passwordHash:bcrypt.hashSync(req.body.password,10),
        isAdmin:req.body.isAdmin
     })
+    console.log(user)
        
        user=await  user.save()
        if(!user)
         return res.status(400).send("the user can not be created")
-       
-     
-     res.send(user)
+ 
+     let registedUser= user
+     res.send(registedUser)
    
    });
    
 
 //get data from db :-
-router.get("/", checklogin, async(req,res)=>{
-    const user = await User.find().select("-passwordHash")
-       console.log(user)
+router.get("/",  async(req,res)=>{
+    const user = await User.find().select("-passwordHash").sort({createdAt:-1})
+       
     res.send(user)
      
 });
 
 //search from db by key:-
-router.get("/:id",async(req,res)=>{
-    const user = await User.find(
-        {name:req.params.key}
-    ).select('-passwordHash')
+router.get("/own",async(req,res)=>{
+
+    // const user = await User.find(
+    //     {email:req.body.email}
+    // ).select('-passwordHash')
    
-       console.log(user)
-    res.send(user)
+    //    console.log(user)
+    // res.send(user)
      
 });
+
+//admin
+
+router.get("/admin/:email",async(req,res)=>{
+    const email=req.params.email
+    const user= await User.findOne({email})
+  
+    isFinite(user.isadmin===true)
+    res.send({"isAdmin":user.isAdmin})
+})
 //update data into db :
 router.put("/:id",async(req,res)=>{
 
@@ -61,25 +75,30 @@ router.put("/:id",async(req,res)=>{
     )
     
     
-     console.log(user)
+     
     res.send(user)
      
 });
 
 //deldete data from db :-
 router.delete("/:id",async(req,res)=>{
+ 
     const user = await User.deleteOne({_id:req.params.id}
        
     )
     
-    
-    console.log(user)
-    res.send(user)
+    res.send({
+        success:true,
+        message:"successfully deleted user",
+        user
+        
+    })
      
 });
 //for login user:-
 
 router.post('/login',async(req,res)=>{
+    console.log(req.body)
     const user= await User.findOne({email:req.body.email})
     const secret=process.env.SECRET
     if(!user){
@@ -96,7 +115,7 @@ router.post('/login',async(req,res)=>{
             secret,
             {expiresIn:'1h'}
         )
-        return res.status(200).send({user:user.email,token:token})
+        return res.status(200).send({user:user,token:token})
     }
     else{
         res.status(400).send("user is not authenticated")

@@ -11,7 +11,7 @@ const productSchema= mongoose.Schema({
     description:{
         type:String
     },
-    image:{
+    photo:{
         type:String,
         default:''
 
@@ -19,21 +19,38 @@ const productSchema= mongoose.Schema({
     brand:{
         type:String
     },
-    countInStock:{
-    type:Number
+    category:{
+        type:mongoose.ObjectId,
+        ref:"Category",
+        required:true
     },
+    // countInStock:{
+    // type:Number
+    // },
     createdAt:{
         type: Date, 
         required: true, 
         default: Date.now
     },
-    rating:{
-        type:Number
-    },
-    category:{
-        type:String
+    // rating:{
+    //     type:Number
+    // },
+    subcategory:{
+        type:mongoose.ObjectId,
+        ref:"SubCategory",
+        required:true
     }
 
    
 })
+
+productSchema.virtual('id').get(function (){
+    return this._id.toHexString();
+
+});
+productSchema.set('toJSON',{
+    virtuals:true
+})
+
+
 module.exports=productSchema
