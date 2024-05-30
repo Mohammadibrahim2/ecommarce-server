@@ -14,14 +14,14 @@ const app=express()
 
 // const bcrypt =require("bcrypt")
 
-// const jwt =require("jsonwebtoken")
+const jwt =require("jsonwebtoken")
 
 
-// const userSchema=require("./schemas/userSchema")
+const userSchema=require("./models/User.js")
 
-// const User= new mongoose.model("User",userSchema)
+const User= new mongoose.model("User",userSchema)
  //mohammadibrahim6454
-        //ibWUdfbgoLQFHvtG
+        //Bm0asUCcjBmEPbKl
  app.use(cors())
 dotenv.config()
 app.use(express.json())
@@ -29,22 +29,24 @@ app.use(express.json())
 
 
 
-// const client = new MongoClient(uri, { useNewUrlParser: true,
-//      useUnifiedTopology: true, 
-//      serverApi: ServerApiVersion.v1 });
 
+const productRouter=require("./routes/productrouter");
+const orderRouter=require("./routes/orderrouter");
+const userRouter=require("./routes/userrouter");
+const categoryRouter=require("./routes/categoryrouter");
+const subcategoryRouter=require("./routes/subcategoryrouter");
 
-const productRouter=require("./routes/productrouter")
-const orderRouter=require("./routes/orderrouter")
-const userRouter=require("./routes/userrouter")
-const categoryRouter=require("./routes/categoryrouter")
-const subcategoryRouter=require("./routes/subcategoryrouter")
-
-// const authJwt = require("./helpers/authjwt");
-// app.use(authJwt)
+const authJwt = require("./helpers/authjwt");
+app.use(authJwt)
 
 //connection withe db:-
-const uri = process.env.CONNECT_DB
+const uri ="mongodb+srv://mohammadibrahim6454:Bm0asUCcjBmEPbKl@cluster0.25qr4ok.mongodb.net/"
+
+
+// const client = new MongoClient(uri, { useNewUrlParser: true,
+//     useUnifiedTopology: true, 
+//     serverApi: ServerApiVersion.v1 });
+ 
 mongoose.set("strictQuery", true);
 mongoose.connect(uri,{
     useNewUrlParser:true,
@@ -106,4 +108,4 @@ app.use(errorHandler)
 app.listen(port,()=>{
     console.log(port,"port")
 
-})
+});

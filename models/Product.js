@@ -6,40 +6,40 @@ const productSchema= mongoose.Schema({
         
     },
     price:{
-        type:String
+        type:String,
     },
     description:{
         type:String
     },
-    photo:{
-        type:String,
-        default:''
+    // photo:{
+    //     type:String,
+    //     default:''
 
-    },
+    // },
     brand:{
         type:String
     },
-    category:{
-        type:mongoose.ObjectId,
-        ref:"Category",
-        required:true
-    },
+    // category:{
+    //     type:mongoose.ObjectId,
+    //     ref:"Category",
+    //     required:true
+    // },
     // countInStock:{
     // type:Number
     // },
-    createdAt:{
-        type: Date, 
-        required: true, 
-        default: Date.now
-    },
+    // createdAt:{
+    //     type: Date, 
+    //     required: true, 
+    //     default: Date.now
+    // },
     // rating:{
     //     type:Number
     // },
-    subcategory:{
-        type:mongoose.ObjectId,
-        ref:"SubCategory",
-        required:true
-    }
+    // subcategory:{
+    //     type:mongoose.ObjectId,
+    //     ref:"SubCategory",
+    //     required:true
+    // }
 
    
 })
@@ -53,4 +53,4 @@ productSchema.set('toJSON',{
 })
 
 
-module.exports=productSchema
+module.exports=productSchema;

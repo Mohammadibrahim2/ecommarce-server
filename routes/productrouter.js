@@ -43,22 +43,23 @@ router.post("/many", async (req, res) => {
 
 
 });
-router.post("/", async (req, res) => {
+router.post("/", async(req, res) => {
 
-
+    console.log("there usjhfkj hgkhfda")
+console.log(req.body)
     const product = new Product({
         name: req.body.name,
         category: req.body.category,
         price: req.body.price,
         brand: req.body.brand,
-        photo: req.body.photo,
-        description: req.body.description
+        // photo: req.body.photo,
+        // description: req.body.description
 
     })
 
-    const result = await product.save()
+     const result = await res.send({message:"there is a probem"})
     console.log(result)
-    res.send(result)
+    
 
 
 });
@@ -66,11 +67,13 @@ router.post("/", async (req, res) => {
 
 //get data from db :-
 router.get("/", async (req, res) => {
-    const products = await Product.find().populate("category", "name")
+    const products = await Product.find()
     const countProducts=await Product.countDocuments({})
-    res.send({products,countProducts})
-
+    
+        res.send({products,countProducts})
+  
 });
+//.populate("category", "name")
 
 //search from db by key:-
 router.get("/search/:keyword", async (req, res) => {
